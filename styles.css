@@ -15,14 +15,23 @@ html {
     border-radius: 10px;
 }
 .calculatorScreen {
+    display: flex;
+    justify-content: flex-end;
     background-color: white;
     width: 350px;
     margin: 0 auto;
     margin-top: 20px;
     height: 110px;
+    font-family: monospace;
+}
+.calculatorScreen h1 {
+    margin-top: auto;
+    font-size: 5rem;  
 }
 .clear-delete {
+    display: flex;
     margin: 0 auto;
+    gap: 10px;
 }
 .clear-delete button {
     border: 1px solid black;
@@ -44,9 +53,18 @@ html {
     border-radius: 5px;
     font-size: 3rem;
 }
+.numbers button:hover {
+    background-color: rgb(255, 255, 255, 0.8);
+}
 .clearBtn {
     background-color: rgb(55, 255, 115);
 }
+.clearBtn:hover {
+    background-color: rgb(55, 255, 115, 0.8);
+}
 .deleteBtn {
     background-color: rgb(233, 0, 0);
+}
+.deleteBtn:hover {
+    background-color: rgb(233, 0, 0, 0.8);
 }
