@@ -12,13 +12,23 @@ html {
     width: 400px;
     height: 600px;
     margin: 20px auto;
+    border-radius: 10px;
+}
+.calculatorScreen {
+    background-color: white;
+    width: 350px;
+    margin: 0 auto;
+    margin-top: 20px;
+    height: 110px;
 }
 .clear-delete {
     margin: 0 auto;
 }
 .clear-delete button {
     border: 1px solid black;
-    padding: 20px 40px;
+    padding: 20px 30px;
+    font-size: 3rem;
+    border-radius: 10px;
 }
 .numbers {
     display: grid;
@@ -32,4 +42,11 @@ html {
 .numbers button {
     border: 1px solid black;
     border-radius: 5px;
+    font-size: 3rem;
+}
+.clearBtn {
+    background-color: rgb(55, 255, 115);
+}
+.deleteBtn {
+    background-color: rgb(233, 0, 0);
 }
