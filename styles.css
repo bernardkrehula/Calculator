@@ -16,7 +16,7 @@ html {
 }
 .calculatorScreen {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
     background-color: white;
     width: 350px;
     margin: 0 auto;
@@ -26,7 +26,15 @@ html {
 }
 .calculatorScreen h1 {
     margin-top: auto;
-    font-size: 5rem;  
+    font-size: 5rem;
+    margin-right: 0;
+    margin-left: auto;  
+}
+.calculatorScreen h2 {
+    font-size: 3.5rem;
+    margin-top: 5px;
+    margin-right: 0;
+    margin-left: auto;
 }
 .clear-delete {
     display: flex;
