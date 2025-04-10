@@ -10,9 +10,9 @@ function numbersCreator() {
     let currentNumber = 0;
     let totalNumber = 0;
 
-    const getCurrentNumber = () => currentNumber;
+    const getCurrentNumber = () => { return currentNumber };
     const toggleCurrentNumber = (value) => { currentNumber = value };
-    const getTotalNumber = () => totalNumber;
+    const getTotalNumber = () => { return totalNumber };
     const toggleTotalNumber = (value) => { totalNumber = value };
 
     return { getCurrentNumber, toggleCurrentNumber, getTotalNumber, toggleTotalNumber }; 
@@ -22,6 +22,7 @@ function manageNumbers() {
     const numbers = [];
     let clickedNumber = '';
     let currentOperation = '';
+    let operation = 0;
 
     const pushNumberInArray = () => numbers.push(numbersCreator());
 
@@ -50,6 +51,9 @@ function manageNumbers() {
     const setOperation = (op) => { currentOperation = op };
     const getOperation = () => currentOperation;
 
+    const setNumberAndOperation = (op) => { operation = op };
+    const getNumberAndOperation = () => { return operation };
+
     const sum = () => {
         numbers[0].toggleCurrentNumber(returnTotalNumber() + returnCurrentNumber());
     }
@@ -73,7 +77,7 @@ function manageNumbers() {
         currentOperation = '';
     }
 
-    return { sum, subtraction, multiplication, division, returnArray, getClickedNumber, pushNumberInArray, pushClickedNumberInArray, moveCurrentNumberToTotalNumber, returnCurrentNumber, returnTotalNumber, clearNumbers, getClicked, setClicked, setOperation, getOperation};
+    return { setNumberAndOperation, getNumberAndOperation, sum, subtraction, multiplication, division, returnArray, getClickedNumber, pushNumberInArray, pushClickedNumberInArray, moveCurrentNumberToTotalNumber, returnCurrentNumber, returnTotalNumber, clearNumbers, getClicked, setClicked, setOperation, getOperation};
 }
 
 const manager = manageNumbers();
@@ -98,9 +102,14 @@ numberOperation.forEach((numOperation) => {
         const operation = numOperation.dataset.operation;
         const getArrayNumber = manager.returnArray();
 
+        if (operation === '+') manager.sum();
+        if (operation === '-') manager.subtraction();
+        if (operation === '*') manager.multiplication();
+        if (operation === '/') manager.division();
         manager.setOperation(operation);
         manager.moveCurrentNumberToTotalNumber();
-
+        manager.setNumberAndOperation(getArrayNumber.getTotalNumber() + operation);
+        console.log(manager.getNumberAndOperation())
         totalNumberOnScreen.innerHTML = `${getArrayNumber.getTotalNumber()} ${operation}`;
         displayNumbers(getArrayNumber);
     });
