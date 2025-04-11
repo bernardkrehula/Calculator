@@ -43,7 +43,7 @@ function manageNumbers() {
 
     const returnCurrentNumber = () => numbers[0].getCurrentNumber();
     const returnTotalNumber = () => numbers[0].getTotalNumber();
-    const returnArray = () => numbers[0];
+    const returnArray = () => numbers[0].getCurrentNumber();
 
     const setClicked = (val) => { clickedNumber = val };
     const getClicked = () => clickedNumber;
