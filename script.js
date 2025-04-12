@@ -9,20 +9,25 @@ const totalNumberOnScreen = document.querySelector('.calculatorScreen h2');
 function numbersCreator() {
     let currentNumber = 0;
     let totalNumber = 0;
+    let operation = 0;
+    let result = 0;
 
     const getCurrentNumber = () => { return currentNumber };
     const toggleCurrentNumber = (value) => { currentNumber = value };
     const getTotalNumber = () => { return totalNumber };
     const toggleTotalNumber = (value) => { totalNumber = value };
+    const setNumberAndOperation = (op, num) => { operation = op, num };
+    const getNumberAndOperation = () => { return operation };
+    const getResultNumber = () => { return result };
+    const toggleResultNumber = (value) => { result = value };
 
-    return { getCurrentNumber, toggleCurrentNumber, getTotalNumber, toggleTotalNumber }; 
+    return { getCurrentNumber, toggleCurrentNumber, getTotalNumber, toggleTotalNumber, setNumberAndOperation, getNumberAndOperation, getResultNumber, toggleResultNumber }; 
 }
 
 function manageNumbers() {
     const numbers = [];
     let clickedNumber = '';
     let currentOperation = '';
-    let operation = 0;
 
     const pushNumberInArray = () => numbers.push(numbersCreator());
 
@@ -35,27 +40,23 @@ function manageNumbers() {
         numbers[0].toggleCurrentNumber(Number(clickedNumber));
     }
 
-    const moveCurrentNumberToTotalNumber = () => {
-        numbers[0].toggleTotalNumber(numbers[0].getCurrentNumber());
+    const setCurrentNumberToZero = () => {
         clickedNumber = '';
         numbers[0].toggleCurrentNumber(0);
     }
 
     const returnCurrentNumber = () => numbers[0].getCurrentNumber();
     const returnTotalNumber = () => numbers[0].getTotalNumber();
-    const returnArray = () => numbers[0].getCurrentNumber();
+    const returnResultNumber = () => numbers[0].getResultNumber();
+    const returnArray = () => numbers[0];
 
     const setClicked = (val) => { clickedNumber = val };
     const getClicked = () => clickedNumber;
 
-    const setOperation = (op) => { currentOperation = op };
-    const getOperation = () => currentOperation;
-
-    const setNumberAndOperation = (op) => { operation = op };
-    const getNumberAndOperation = () => { return operation };
-
     const sum = () => {
-        numbers[0].toggleCurrentNumber(returnTotalNumber() + returnCurrentNumber());
+        let suma = returnResultNumber() + returnCurrentNumber();
+        console.log(suma)
+        numbers[0].toggleResultNumber(suma);
     }
 
     const subtraction = () => {
@@ -77,7 +78,7 @@ function manageNumbers() {
         currentOperation = '';
     }
 
-    return { setNumberAndOperation, getNumberAndOperation, sum, subtraction, multiplication, division, returnArray, getClickedNumber, pushNumberInArray, pushClickedNumberInArray, moveCurrentNumberToTotalNumber, returnCurrentNumber, returnTotalNumber, clearNumbers, getClicked, setClicked, setOperation, getOperation};
+    return { returnResultNumber, sum, subtraction, multiplication, division, returnArray, getClickedNumber, pushNumberInArray, pushClickedNumberInArray, setCurrentNumberToZero, returnCurrentNumber, returnTotalNumber, clearNumbers, getClicked, setClicked };
 }
 
 const manager = manageNumbers();
@@ -85,6 +86,7 @@ manager.pushNumberInArray();
 
 function displayNumbers(number) {
     currentNumberOnScreen.innerHTML = number.getCurrentNumber();
+    totalNumberOnScreen.innerHTML = number.getResultNumber();
 }
 
 numbers.forEach((number) => {
@@ -101,16 +103,14 @@ numberOperation.forEach((numOperation) => {
     numOperation.addEventListener('click', () => {
         const operation = numOperation.dataset.operation;
         const getArrayNumber = manager.returnArray();
-
-        if (operation === '+') manager.sum();
-        if (operation === '-') manager.subtraction();
-        if (operation === '*') manager.multiplication();
-        if (operation === '/') manager.division();
-        manager.setOperation(operation);
-        manager.moveCurrentNumberToTotalNumber();
-        manager.setNumberAndOperation(getArrayNumber.getTotalNumber() + operation);
-        console.log(manager.getNumberAndOperation())
-        totalNumberOnScreen.innerHTML = `${getArrayNumber.getTotalNumber()} ${operation}`;
+    
+        manager.sum();
+       
+        console.log(getArrayNumber.getResultNumber()) 
+        manager.setCurrentNumberToZero();
+        
+        getArrayNumber.setNumberAndOperation(operation, getArrayNumber.getTotalNumber());
+        
         displayNumbers(getArrayNumber);
     });
 });
@@ -119,6 +119,7 @@ equalsBtn.addEventListener('click', () => {
     const getArrayNumber = manager.returnArray();
     const operation = manager.getOperation();
 
+    console.log(getArrayNumber.getTotalNumber())
     if (operation === '+') manager.sum();
     if (operation === '-') manager.subtraction();
     if (operation === '*') manager.multiplication();
