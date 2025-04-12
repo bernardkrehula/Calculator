@@ -55,25 +55,27 @@ function manageNumbers() {
 
     const sum = () => {
         let suma = returnResultNumber() + returnCurrentNumber();
-        console.log(suma)
         numbers[0].toggleResultNumber(suma);
     }
 
     const subtraction = () => {
-        numbers[0].toggleCurrentNumber(returnTotalNumber() - returnCurrentNumber());
+        let subtract = returnResultNumber() - returnCurrentNumber();
+        numbers[0].toggleResultNumber(subtract);
     }
 
     const multiplication = () => {
-        numbers[0].toggleCurrentNumber(returnTotalNumber() * returnCurrentNumber());
+        let multiplicate = returnResultNumber() * returnCurrentNumber();
+        numbers[0].toggleCurrentNumber(multiplicate);
     }
 
     const division = () => {
-        numbers[0].toggleCurrentNumber(returnTotalNumber() / returnCurrentNumber());
+        let divide = returnResultNumber() / returnCurrentNumber();
+        numbers[0].toggleCurrentNumber(divide);
     }
 
     const clearNumbers = () => {
         numbers[0].toggleCurrentNumber(0);
-        numbers[0].toggleTotalNumber(0);
+        numbers[0].toggleResultNumber(0);
         clickedNumber = '';
         currentOperation = '';
     }
@@ -104,7 +106,10 @@ numberOperation.forEach((numOperation) => {
         const operation = numOperation.dataset.operation;
         const getArrayNumber = manager.returnArray();
     
-        manager.sum();
+        if (operation === '+') manager.sum();
+        if (operation === '-') manager.subtraction();
+        if (operation === '*') manager.multiplication();
+        if (operation === '/') manager.division();
        
         console.log(getArrayNumber.getResultNumber()) 
         manager.setCurrentNumberToZero();
@@ -117,17 +122,9 @@ numberOperation.forEach((numOperation) => {
 
 equalsBtn.addEventListener('click', () => {
     const getArrayNumber = manager.returnArray();
-    const operation = manager.getOperation();
-
-    console.log(getArrayNumber.getTotalNumber())
-    if (operation === '+') manager.sum();
-    if (operation === '-') manager.subtraction();
-    if (operation === '*') manager.multiplication();
-    if (operation === '/') manager.division();
 
     displayNumbers(getArrayNumber);
     totalNumberOnScreen.innerHTML = '';
-    manager.setOperation('');
 });
 
 clearBtn.addEventListener('click', () => {
