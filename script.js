@@ -6,30 +6,28 @@ const numberOperation = document.querySelectorAll('[data-operation]');
 const currentNumberOnScreen = document.querySelector('.calculatorScreen h1');
 const totalNumberOnScreen = document.querySelector('.calculatorScreen h2');
 
-function numbersCreator() {
+/* function numbersCreator() {
     let currentNumber = 0;
     let totalNumber = 0;
-    let operation = 0;
     let result = 0;
 
     const getCurrentNumber = () => { return currentNumber };
     const toggleCurrentNumber = (value) => { currentNumber = value };
     const getTotalNumber = () => { return totalNumber };
     const toggleTotalNumber = (value) => { totalNumber = value };
-    const setNumberAndOperation = (op, num) => { operation = op, num };
-    const getNumberAndOperation = () => { return operation };
     const getResultNumber = () => { return result };
     const toggleResultNumber = (value) => { result = value };
 
-    return { getCurrentNumber, toggleCurrentNumber, getTotalNumber, toggleTotalNumber, setNumberAndOperation, getNumberAndOperation, getResultNumber, toggleResultNumber }; 
+    return { getCurrentNumber, toggleCurrentNumber, getTotalNumber, toggleTotalNumber, getResultNumber, toggleResultNumber }; 
 }
+
+
 
 function manageNumbers() {
     const numbers = [];
     let clickedNumber = '';
     let currentOperation = '';
-
-    const pushNumberInArray = () => numbers.push(numbersCreator());
+    let operation = '';
 
     const getClickedNumber = (number) => {
         clickedNumber += number;
@@ -53,6 +51,11 @@ function manageNumbers() {
     const setClicked = (val) => { clickedNumber = val };
     const getClicked = () => clickedNumber;
 
+    const getOperation = () => { return operation };
+    const setOperation = (value) => { operation = value };
+
+    const moveCurrentNumberToResultNumber = () => { numbers[0].toggleResultNumber(returnCurrentNumber()) }
+
     const sum = () => {
         let suma = returnResultNumber() + returnCurrentNumber();
         numbers[0].toggleResultNumber(suma);
@@ -65,12 +68,12 @@ function manageNumbers() {
 
     const multiplication = () => {
         let multiplicate = returnResultNumber() * returnCurrentNumber();
-        numbers[0].toggleCurrentNumber(multiplicate);
+        numbers[0].toggleResultNumber(multiplicate);
     }
 
     const division = () => {
         let divide = returnResultNumber() / returnCurrentNumber();
-        numbers[0].toggleCurrentNumber(divide);
+        numbers[0].toggleResultNumber(divide);
     }
 
     const clearNumbers = () => {
@@ -80,8 +83,10 @@ function manageNumbers() {
         currentOperation = '';
     }
 
-    return { returnResultNumber, sum, subtraction, multiplication, division, returnArray, getClickedNumber, pushNumberInArray, pushClickedNumberInArray, setCurrentNumberToZero, returnCurrentNumber, returnTotalNumber, clearNumbers, getClicked, setClicked };
+    return { moveCurrentNumberToResultNumber, getOperation, setOperation, returnResultNumber, sum, subtraction, multiplication, division, returnArray, getClickedNumber, pushNumberInArray, pushClickedNumberInArray, setCurrentNumberToZero, returnCurrentNumber, returnTotalNumber, clearNumbers, getClicked, setClicked };
 }
+
+
 
 const manager = manageNumbers();
 manager.pushNumberInArray();
@@ -90,59 +95,43 @@ function displayNumbers(number) {
     currentNumberOnScreen.innerHTML = number.getCurrentNumber();
     totalNumberOnScreen.innerHTML = number.getResultNumber();
 }
+ */
+let firstNumber = '';
+let secondNumber;
+let result;
+let operation;
 
+//Napravi funckiju calculate
+//Onda prima 3 argumenta a,b i operation
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
-        const getArrayNumber = manager.returnArray();
-
-        manager.getClickedNumber(number.dataset.number);
-        manager.pushClickedNumberInArray();
-        displayNumbers(getArrayNumber);
+       //Puni prvi broj ovaj listener
+       
     });
 });
 
 numberOperation.forEach((numOperation) => {
     numOperation.addEventListener('click', () => {
-        const operation = numOperation.dataset.operation;
-        const getArrayNumber = manager.returnArray();
-    
-        if (operation === '+') manager.sum();
-        if (operation === '-') manager.subtraction();
-        if (operation === '*') manager.multiplication();
-        if (operation === '/') manager.division();
+       //Scenarij 1: 
+       //Nemam drugi broj i nemam operaciju
+       //Prebaci prvi broj u drugi prvi isprazni zapamti operaciju
        
-        console.log(getArrayNumber.getResultNumber()) 
-        manager.setCurrentNumberToZero();
-        
-        getArrayNumber.setNumberAndOperation(operation, getArrayNumber.getTotalNumber());
-        
-        displayNumbers(getArrayNumber);
+       //Scenarij 2: Imam prvi broj drugi broj i operaciju
+       console.log('first number: ', firstNumber);
+       console.log('second number: ', secondNumber);
+       console.log('operation: ', operation);
     });
 });
 
 equalsBtn.addEventListener('click', () => {
-    const getArrayNumber = manager.returnArray();
 
-    displayNumbers(getArrayNumber);
-    totalNumberOnScreen.innerHTML = '';
 });
 
 clearBtn.addEventListener('click', () => {
-    manager.clearNumbers();
-    currentNumberOnScreen.innerHTML = '0';
-    totalNumberOnScreen.innerHTML = '';
+
 });
 
 deleteBtn.addEventListener('click', () => {
-    let value = manager.getClicked();
-    value = value.slice(0, -1);
-    manager.setClicked(value);
-
-    if (value === '') {
-        manager.returnArray().toggleCurrentNumber(0);
-    } else {
-        manager.returnArray().toggleCurrentNumber(Number(value));
-    }
-
-    displayNumbers(manager.returnArray());
+   
 });
+
