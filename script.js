@@ -103,6 +103,9 @@ let operation;
 
 //Napravi funckiju calculate
 //Onda prima 3 argumenta a,b i operation
+function calculate() {
+    
+}
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
        //Puni prvi broj ovaj listener
