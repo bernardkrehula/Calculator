@@ -98,31 +98,67 @@ function displayNumbers(number) {
  */
 let firstNumber = '';
 let secondNumber;
-let result;
+let result = 0;
 let operation;
 
 //Napravi funckiju calculate
 //Onda prima 3 argumenta a,b i operation
-function calculate() {
-    
+function calculate(a, b, operation) {
+    switch (operation) {
+        case '+':
+            return b + a;
+        case '-':
+            return b - a;
+        case '*':
+            return b * a;
+        case '/':
+            return b / a;
+        default:
+            return 0;
+    }
 }
+
+
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
        //Puni prvi broj ovaj listener
-       
+       let num = number.dataset.number;
+       firstNumber += num;
+       currentNumberOnScreen.innerHTML = `${firstNumber}`;
     });
 });
-
+           /*   console.log('first number: ', firstNumber);
+       console.log('second number: ', secondNumber);
+       console.log('operation: ', operation); */
 numberOperation.forEach((numOperation) => {
     numOperation.addEventListener('click', () => {
-       //Scenarij 1: 
-       //Nemam drugi broj i nemam operaciju
-       //Prebaci prvi broj u drugi prvi isprazni zapamti operaciju
+        let operate = numOperation.dataset.operation;
+
        
-       //Scenarij 2: Imam prvi broj drugi broj i operaciju
-       console.log('first number: ', firstNumber);
-       console.log('second number: ', secondNumber);
-       console.log('operation: ', operation);
+        if (firstNumber !== '') {
+            firstNumber = Number(firstNumber);
+            currentNumberOnScreen.innerHTML = '';
+          
+            if (secondNumber === undefined) {
+                secondNumber = firstNumber;
+                firstNumber = '';
+                operation = operate;
+            } 
+      
+            else {
+               
+                result = calculate(firstNumber, secondNumber, operation);
+                console.log("Rezultat:", result);
+
+        
+                secondNumber = result;
+                firstNumber = '';
+                operation = operate;
+                
+                totalNumberOnScreen.innerHTML = `${secondNumber}`;
+            }
+        }
+        totalNumberOnScreen.innerHTML = `${secondNumber}` + `${operate}`;
     });
 });
 
@@ -131,10 +167,16 @@ equalsBtn.addEventListener('click', () => {
 });
 
 clearBtn.addEventListener('click', () => {
-
+    firstNumber = '';
+    secondNumber = '';
+    result = 0;
+    operation = '';
+    currentNumberOnScreen.innerHTML = '';
+    totalNumberOnScreen.innerHTML = ``;
 });
 
 deleteBtn.addEventListener('click', () => {
-   
+   firstNumber = firstNumber.slice(0, -1);
+   currentNumberOnScreen.innerHTML = `${firstNumber}`;
 });
 
