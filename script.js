@@ -116,7 +116,12 @@ function calculate(a, b, operation) {
         case '*':
             return b * a;
         case '/':
-            return b / a;
+            if(b / a === Infinity){
+                return 'error'
+            }
+            else{
+                return b / a;
+            } 
     }
 }
 
