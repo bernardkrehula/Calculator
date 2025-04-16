@@ -3,6 +3,7 @@ const deleteBtn = document.querySelector('.deleteBtn');
 const equalsBtn = document.querySelector('[data-equals]');
 const numbers = document.querySelectorAll('[data-number]');
 const numberOperation = document.querySelectorAll('[data-operation]');
+const decimalOperation = document.querySelector('[data-decimal]')
 const currentNumberOnScreen = document.querySelector('.calculatorScreen h1');
 const totalNumberOnScreen = document.querySelector('.calculatorScreen h2');
 
@@ -103,6 +104,9 @@ let operation;
 
 //Napravi funckiju calculate
 //Onda prima 3 argumenta a,b i operation
+
+
+//Onemoguciti dijeljenje s 0 ako se dijeli s 0 mora baciti error
 function calculate(a, b, operation) {
     switch (operation) {
         case '+':
@@ -113,8 +117,6 @@ function calculate(a, b, operation) {
             return b * a;
         case '/':
             return b / a;
-        default:
-            return 0;
     }
 }
 
@@ -161,16 +163,19 @@ numberOperation.forEach((numOperation) => {
         totalNumberOnScreen.innerHTML = `${secondNumber}` + `${operate}`;
     });
 });
-
+decimalOperation.addEventListener('click', () => {
+    firstNumber = firstNumber + '.';
+    currentNumberOnScreen.innerHTML = firstNumber;
+})
 equalsBtn.addEventListener('click', () => {
-
+    
 });
 
 clearBtn.addEventListener('click', () => {
     firstNumber = '';
-    secondNumber = '';
+    secondNumber = undefined;
     result = 0;
-    operation = '';
+    operation = undefined;
     currentNumberOnScreen.innerHTML = '';
     totalNumberOnScreen.innerHTML = ``;
 });
