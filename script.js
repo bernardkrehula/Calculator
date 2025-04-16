@@ -168,7 +168,9 @@ decimalOperation.addEventListener('click', () => {
     currentNumberOnScreen.innerHTML = firstNumber;
 })
 equalsBtn.addEventListener('click', () => {
-    
+    result = calculate(Number(firstNumber), secondNumber, operation);
+    currentNumberOnScreen.innerHTML = result;
+    totalNumberOnScreen.innerHTML = '';
 });
 
 clearBtn.addEventListener('click', () => {
