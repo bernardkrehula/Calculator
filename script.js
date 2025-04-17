@@ -123,16 +123,19 @@ equalsBtn.addEventListener('click', () => {
 });
 
 clearBtn.addEventListener('click', () => {
-    firstNumber = '';
-    secondNumber = undefined;
-    result = 0;
-    operation = undefined;
+    creator.toggleFirstNumber('');
+    creator.toggleSecondNumber(undefined);
+    creator.toggleResultNumber(0);
+    creator.setOperation(undefined);
     currentNumberOnScreen.innerHTML = '';
     totalNumberOnScreen.innerHTML = ``;
+    manager.setClickedNumberToZero();
 });
 
 deleteBtn.addEventListener('click', () => {
-   firstNumber = firstNumber.slice(0, -1);
-   currentNumberOnScreen.innerHTML = `${firstNumber}`;
+    let firstNumber = manager.getClickedNumber().slice(0, -1);
+    manager.setClickedNumberToZero();
+    manager.setClickedNumber(firstNumber);
+    currentNumberOnScreen.innerHTML = `${manager.getClickedNumber()}`;
 });
 
