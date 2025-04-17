@@ -7,47 +7,45 @@ const decimalOperation = document.querySelector('[data-decimal]')
 const currentNumberOnScreen = document.querySelector('.calculatorScreen h1');
 const totalNumberOnScreen = document.querySelector('.calculatorScreen h2');
 
-/* function numbersCreator() {
-    let currentNumber = 0;
-    let totalNumber = 0;
+function numbersCreator() {
+    let firstNumber = '';
+    let secondNumber;
+    let operation;
     let result = 0;
 
-    const getCurrentNumber = () => { return currentNumber };
-    const toggleCurrentNumber = (value) => { currentNumber = value };
-    const getTotalNumber = () => { return totalNumber };
-    const toggleTotalNumber = (value) => { totalNumber = value };
+    const getFirstNumber = () => { return firstNumber };
+    const toggleFirstNumber = (value) => { firstNumber = value };
+    const getSecondNumber = () => { return secondNumber };
+    const toggleSecondNumber = (value) => { secondNumber = value };
+    const getOperation = () => { return operation };
+    const setOperation = (value) => { operation = value };
     const getResultNumber = () => { return result };
     const toggleResultNumber = (value) => { result = value };
 
-    return { getCurrentNumber, toggleCurrentNumber, getTotalNumber, toggleTotalNumber, getResultNumber, toggleResultNumber }; 
+    return { getFirstNumber, toggleFirstNumber, getSecondNumber, toggleSecondNumber, getOperation, setOperation, getResultNumber, toggleResultNumber }; 
 }
 
+const creator = numbersCreator();
 
-
-function manageNumbers() {
-    const numbers = [];
+function manageNumbers() { 
     let clickedNumber = '';
-    let currentOperation = '';
-    let operation = '';
 
     const getClickedNumber = (number) => {
         clickedNumber += number;
         return clickedNumber;
     }
-
-    const pushClickedNumberInArray = () => {
-        numbers[0].toggleCurrentNumber(Number(clickedNumber));
+    const convertStringToNumber = () => {
+        clickedNumber = Number(clickedNumber);
     }
 
     const setCurrentNumberToZero = () => {
         clickedNumber = '';
-        numbers[0].toggleCurrentNumber(0);
+        creator.toggleFirstNumber(0);
     }
 
-    const returnCurrentNumber = () => numbers[0].getCurrentNumber();
-    const returnTotalNumber = () => numbers[0].getTotalNumber();
-    const returnResultNumber = () => numbers[0].getResultNumber();
-    const returnArray = () => numbers[0];
+    const returnFirstNumber = () => creator.getFirstNumber();
+    const returnSecondNumber = () => creator.getSecondNumber();
+    const returnResultNumber = () => creator.getResultNumber();
 
     const setClicked = (val) => { clickedNumber = val };
     const getClicked = () => clickedNumber;
@@ -81,32 +79,18 @@ function manageNumbers() {
         numbers[0].toggleCurrentNumber(0);
         numbers[0].toggleResultNumber(0);
         clickedNumber = '';
-        currentOperation = '';
     }
 
-    return { moveCurrentNumberToResultNumber, getOperation, setOperation, returnResultNumber, sum, subtraction, multiplication, division, returnArray, getClickedNumber, pushNumberInArray, pushClickedNumberInArray, setCurrentNumberToZero, returnCurrentNumber, returnTotalNumber, clearNumbers, getClicked, setClicked };
+    return { convertStringToNumber, returnFirstNumber, returnResultNumber, returnSecondNumber, moveCurrentNumberToResultNumber, getOperation, setOperation, returnResultNumber, sum, subtraction, multiplication, division, getClickedNumber, setCurrentNumberToZero, clearNumbers, getClicked, setClicked };
 }
-
-
 
 const manager = manageNumbers();
-manager.pushNumberInArray();
 
-function displayNumbers(number) {
-    currentNumberOnScreen.innerHTML = number.getCurrentNumber();
-    totalNumberOnScreen.innerHTML = number.getResultNumber();
-}
- */
 let firstNumber = '';
 let secondNumber;
 let result = 0;
 let operation;
 
-//Napravi funckiju calculate
-//Onda prima 3 argumenta a,b i operation
-
-
-//Onemoguciti dijeljenje s 0 ako se dijeli s 0 mora baciti error
 function calculate(a, b, operation) {
     switch (operation) {
         case '+':
@@ -128,41 +112,35 @@ function calculate(a, b, operation) {
 
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
-       //Puni prvi broj ovaj listener
        let num = number.dataset.number;
-       firstNumber += num;
+
        currentNumberOnScreen.innerHTML = `${firstNumber}`;
+       manager.getClickedNumber(num)
     });
 });
-           /*   console.log('first number: ', firstNumber);
-       console.log('second number: ', secondNumber);
-       console.log('operation: ', operation); */
+
 numberOperation.forEach((numOperation) => {
     numOperation.addEventListener('click', () => {
         let operate = numOperation.dataset.operation;
+        creator.setOperation(operate);
 
-       
-        if (firstNumber !== '') {
+        if (manager.returnFirstNumber() !== '') {
             firstNumber = Number(firstNumber);
             currentNumberOnScreen.innerHTML = '';
           
-            if (secondNumber === undefined) {
-                secondNumber = firstNumber;
-                firstNumber = '';
-                operation = operate;
+            if (manager.returnSecondNumber() === undefined) {
+                manager.toggleSecondNumber(firstNumber);
+                manager.toggleFirstNumber('');
+                manager.setOperation(operate);
             } 
       
             else {
-               
-                result = calculate(firstNumber, secondNumber, operation);
-                console.log("Rezultat:", result);
-
-        
-                secondNumber = result;
-                firstNumber = '';
-                operation = operate;
+                manager.toggleResultNumber(calculate(firstNumber, secondNumber, operation)) ;
+                manager.toggleSecondNumber(result);
+                manager.toggleFirstNumber('');
+                manager.setOperation(operate);
                 
-                totalNumberOnScreen.innerHTML = `${secondNumber}`;
+                totalNumberOnScreen.innerHTML = `${manager.getSecondNumber()}`;
             }
         }
         totalNumberOnScreen.innerHTML = `${secondNumber}` + `${operate}`;
