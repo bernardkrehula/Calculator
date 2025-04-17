@@ -115,9 +115,11 @@ decimalOperation.addEventListener('click', () => {
     currentNumberOnScreen.innerHTML = manager.getClickedNumber();
 })
 equalsBtn.addEventListener('click', () => {
-    result = calculate(Number(firstNumber), secondNumber, operation);
-    currentNumberOnScreen.innerHTML = result;
+    manager.pushNumberToFirstNumber();
+    creator.toggleResultNumber(calculate(creator.getFirstNumber(), creator.getSecondNumber(), creator.getOperation())) ;
+    currentNumberOnScreen.innerHTML = creator.getResultNumber();
     totalNumberOnScreen.innerHTML = '';
+    manager.setClickedNumberToZero();
 });
 
 clearBtn.addEventListener('click', () => {
