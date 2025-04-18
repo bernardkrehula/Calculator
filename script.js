@@ -14,46 +14,24 @@ function numbersCreator() {
     let result = 0;
 
     const getFirstNumber = () => { return firstNumber };
-    const toggleFirstNumber = (value) => { firstNumber = value };
+    const resetFirstNumber = () => { firstNumber = '' };
+    const setFirstNumber = (value) => { firstNumber += value };
     const getSecondNumber = () => { return secondNumber };
-    const toggleSecondNumber = (value) => { secondNumber = value };
+    const setSecondNumber = (value) => { secondNumber = value };
     const getOperation = () => { return operation };
     const setOperation = (value) => { operation = value };
     const getResultNumber = () => { return result };
-    const toggleResultNumber = (value) => { result = value };
+    const setResultNumber = (value) => { result = value };
 
-    return { getFirstNumber, toggleFirstNumber, getSecondNumber, toggleSecondNumber, getOperation, setOperation, getResultNumber, toggleResultNumber }; 
+    return { getFirstNumber, setFirstNumber, resetFirstNumber, getSecondNumber, setSecondNumber, getOperation, setOperation, getResultNumber, setResultNumber }; 
 }
 
 const creator = numbersCreator();
 
-function manageNumbers() { 
-    let clickedNumber = '';
-
-    const setClickedNumber = (number) => {
-        clickedNumber += number;
-        return clickedNumber;
-    }
-    const pushNumberToFirstNumber = () => {
-        creator.toggleFirstNumber(Number(clickedNumber))
-    }
-
-    const getClickedNumber = () => clickedNumber;
-
-    const setClickedNumberToZero = () => {
-        clickedNumber = '';
-    }
-
-    const clearNumbers = () => {
-        numbers[0].toggleCurrentNumber(0);
-        numbers[0].toggleResultNumber(0);
-        clickedNumber = '';
-    }
-
-    return { pushNumberToFirstNumber, getClickedNumber, setClickedNumber, setClickedNumberToZero, clearNumbers };
-}
-
-const manager = manageNumbers();
+let firstNumber = '';
+let secondNumber;
+let result = 0;
+let operation;
 
 function calculate(a, b, operation) {
     switch (operation) {
@@ -77,65 +55,62 @@ function calculate(a, b, operation) {
 numbers.forEach((number) => {
     number.addEventListener('click', () => {
        let num = number.dataset.number;
-
-       manager.setClickedNumber(num);
-       currentNumberOnScreen.innerHTML = `${manager.getClickedNumber()}`;
+       creator.setFirstNumber(num);
+       currentNumberOnScreen.innerHTML = `${creator.getFirstNumber()}`;
     });
 });
 
 numberOperation.forEach((numOperation) => {
     numOperation.addEventListener('click', () => {
         let operate = numOperation.dataset.operation;
-        manager.pushNumberToFirstNumber();
-      
+
+       
         if (creator.getFirstNumber() !== '') {
             currentNumberOnScreen.innerHTML = '';
           
             if (creator.getSecondNumber() === undefined) {
-                creator.toggleSecondNumber(creator.getFirstNumber());
-                creator.toggleFirstNumber('');
+                creator.setSecondNumber(creator.getFirstNumber());
+                creator.resetFirstNumber();
                 creator.setOperation(operate);
             } 
       
             else {
-                creator.toggleResultNumber(calculate(creator.getFirstNumber(), creator.getSecondNumber(), creator.getOperation())) ;
-                creator.toggleSecondNumber(creator.getResultNumber());
-                creator.toggleFirstNumber('');
+               
+                creator.setResultNumber(calculate(Number(creator.getFirstNumber()), Number(creator.getSecondNumber()), creator.getOperation()));
+        
+                creator.setSecondNumber(creator.getResultNumber());
+                creator.resetFirstNumber();
                 creator.setOperation(operate);
                 
                 totalNumberOnScreen.innerHTML = `${creator.getSecondNumber()}`;
             }
         }
-        manager.setClickedNumberToZero();
         totalNumberOnScreen.innerHTML = `${creator.getSecondNumber()}` + `${creator.getOperation()}`;
     });
 });
 decimalOperation.addEventListener('click', () => {
-    manager.setClickedNumber('.');
-    currentNumberOnScreen.innerHTML = manager.getClickedNumber();
+    creator.setFirstNumber('.');
+    currentNumberOnScreen.innerHTML = creator.getFirstNumber();
 })
 equalsBtn.addEventListener('click', () => {
-    manager.pushNumberToFirstNumber();
-    creator.toggleResultNumber(calculate(creator.getFirstNumber(), creator.getSecondNumber(), creator.getOperation())) ;
+    creator.setResultNumber(calculate(Number(creator.getFirstNumber()), Number(creator.getSecondNumber()), creator.getOperation()));
     currentNumberOnScreen.innerHTML = creator.getResultNumber();
     totalNumberOnScreen.innerHTML = '';
-    manager.setClickedNumberToZero();
 });
 
 clearBtn.addEventListener('click', () => {
-    creator.toggleFirstNumber('');
-    creator.toggleSecondNumber(undefined);
-    creator.toggleResultNumber(0);
+    creator.resetFirstNumber();
+    creator.setSecondNumber(undefined);
+    creator.setResultNumber(0);
     creator.setOperation(undefined);
     currentNumberOnScreen.innerHTML = '';
     totalNumberOnScreen.innerHTML = ``;
-    manager.setClickedNumberToZero();
 });
 
 deleteBtn.addEventListener('click', () => {
-    let firstNumber = manager.getClickedNumber().slice(0, -1);
-    manager.setClickedNumberToZero();
-    manager.setClickedNumber(firstNumber);
-    currentNumberOnScreen.innerHTML = `${manager.getClickedNumber()}`;
-});
+    let firstNumber =  creator.getFirstNumber().slice(0, -1);
 
+    creator.resetFirstNumber();
+    creator.setFirstNumber(firstNumber);
+    currentNumberOnScreen.innerHTML = `${creator.getFirstNumber()}`;
+});
